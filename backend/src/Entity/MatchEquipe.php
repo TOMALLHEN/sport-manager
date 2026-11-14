@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MatchEquipeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MatchEquipeRepository::class)]
 class MatchEquipe
@@ -14,22 +15,30 @@ class MatchEquipe
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotNull(message: "La date du match est obligatoire.")]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date_match = null;
 
+    #[Assert\NotNull(message: "Le score à domicile est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "Le score ne peut pas être négatif.")]
     #[ORM\Column]
     private ?int $score_domicile = null;
 
+    #[Assert\NotNull(message: "Le score extérieur est obligatoire.")]
+    #[Assert\PositiveOrZero(message: "Le score ne peut pas être négatif.")]
     #[ORM\Column]
     private ?int $score_exterieur = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date_creation = null;
 
+    #[Assert\NotNull(message: "L'équipe à domicile est obligatoire.")]
     #[ORM\ManyToOne(inversedBy: 'matchs_domicile')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Equipe $equipe_domicile = null;
 
+    #[Assert\NotNull(message: "L'équipe extérieure est obligatoire.")]
     #[ORM\ManyToOne(inversedBy: 'matchs_exterieurs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Equipe $equipe_exterieure = null;

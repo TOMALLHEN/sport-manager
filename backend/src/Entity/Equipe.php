@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EquipeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,31 @@ class Equipe
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date_creation = null;
+
+    /**
+     * @var Collection<int, Joueur>
+     */
+    #[ORM\OneToMany(targetEntity: Joueur::class, mappedBy: 'equipe')]
+    private Collection $joueurs;
+
+    /**
+     * @var Collection<int, MatchEquipe>
+     */
+    #[ORM\OneToMany(targetEntity: MatchEquipe::class, mappedBy: 'equipe_domicile')]
+    private Collection $matchs_domicile;
+
+    /**
+     * @var Collection<int, MatchEquipe>
+     */
+    #[ORM\OneToMany(targetEntity: MatchEquipe::class, mappedBy: 'equipe_exterieure')]
+    private Collection $matchs_exterieurs;
+
+    public function __construct()
+    {
+        $this->joueurs = new ArrayCollection();
+        $this->matchs_domicile = new ArrayCollection();
+        $this->matchs_exterieurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +147,96 @@ class Equipe
     public function setDateCreation(\DateTime $date_creation): static
     {
         $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Joueur>
+     */
+    public function getJoueurs(): Collection
+    {
+        return $this->joueurs;
+    }
+
+    public function addJoueur(Joueur $joueur): static
+    {
+        if (!$this->joueurs->contains($joueur)) {
+            $this->joueurs->add($joueur);
+            $joueur->setEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoueur(Joueur $joueur): static
+    {
+        if ($this->joueurs->removeElement($joueur)) {
+            // set the owning side to null (unless already changed)
+            if ($joueur->getEquipe() === $this) {
+                $joueur->setEquipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MatchEquipe>
+     */
+    public function getMatchsDomicile(): Collection
+    {
+        return $this->matchs_domicile;
+    }
+
+    public function addMatchsDomicile(MatchEquipe $matchsDomicile): static
+    {
+        if (!$this->matchs_domicile->contains($matchsDomicile)) {
+            $this->matchs_domicile->add($matchsDomicile);
+            $matchsDomicile->setEquipeDomicile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatchsDomicile(MatchEquipe $matchsDomicile): static
+    {
+        if ($this->matchs_domicile->removeElement($matchsDomicile)) {
+            // set the owning side to null (unless already changed)
+            if ($matchsDomicile->getEquipeDomicile() === $this) {
+                $matchsDomicile->setEquipeDomicile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MatchEquipe>
+     */
+    public function getMatchsExterieurs(): Collection
+    {
+        return $this->matchs_exterieurs;
+    }
+
+    public function addMatchsExterieur(MatchEquipe $matchsExterieur): static
+    {
+        if (!$this->matchs_exterieurs->contains($matchsExterieur)) {
+            $this->matchs_exterieurs->add($matchsExterieur);
+            $matchsExterieur->setEquipeExterieure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatchsExterieur(MatchEquipe $matchsExterieur): static
+    {
+        if ($this->matchs_exterieurs->removeElement($matchsExterieur)) {
+            // set the owning side to null (unless already changed)
+            if ($matchsExterieur->getEquipeExterieure() === $this) {
+                $matchsExterieur->setEquipeExterieure(null);
+            }
+        }
 
         return $this;
     }

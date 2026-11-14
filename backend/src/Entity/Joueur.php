@@ -44,6 +44,13 @@ class Joueur
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $date_blessure = null;
 
+    #[ORM\ManyToOne(inversedBy: 'joueurs')]
+    private ?Equipe $equipe = null;
+
+    #[ORM\ManyToOne(inversedBy: 'joueurs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Poste $poste = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -165,6 +172,30 @@ class Joueur
     public function setDateBlessure(?\DateTime $date_blessure): static
     {
         $this->date_blessure = $date_blessure;
+
+        return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): static
+    {
+        $this->equipe = $equipe;
+
+        return $this;
+    }
+
+    public function getPoste(): ?Poste
+    {
+        return $this->poste;
+    }
+
+    public function setPoste(?Poste $poste): static
+    {
+        $this->poste = $poste;
 
         return $this;
     }

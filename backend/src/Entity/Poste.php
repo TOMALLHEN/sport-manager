@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PosteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,17 @@ class Poste
 
     #[ORM\Column]
     private int $min_technique = 0;
+
+    /**
+     * @var Collection<int, Joueur>
+     */
+    #[ORM\OneToMany(targetEntity: Joueur::class, mappedBy: 'poste')]
+    private Collection $joueurs;
+
+    public function __construct()
+    {
+        $this->joueurs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +118,36 @@ class Poste
     public function setMinTechnique(int $min_technique): static
     {
         $this->min_technique = $min_technique;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Joueur>
+     */
+    public function getJoueurs(): Collection
+    {
+        return $this->joueurs;
+    }
+
+    public function addJoueur(Joueur $joueur): static
+    {
+        if (!$this->joueurs->contains($joueur)) {
+            $this->joueurs->add($joueur);
+            $joueur->setPoste($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoueur(Joueur $joueur): static
+    {
+        if ($this->joueurs->removeElement($joueur)) {
+            // set the owning side to null (unless already changed)
+            if ($joueur->getPoste() === $this) {
+                $joueur->setPoste(null);
+            }
+        }
 
         return $this;
     }

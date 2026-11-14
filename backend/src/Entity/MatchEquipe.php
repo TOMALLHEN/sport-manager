@@ -26,6 +26,14 @@ class MatchEquipe
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date_creation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'matchs_domicile')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Equipe $equipe_domicile = null;
+
+    #[ORM\ManyToOne(inversedBy: 'matchs_exterieurs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Equipe $equipe_exterieure = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +83,30 @@ class MatchEquipe
     public function setDateCreation(\DateTime $date_creation): static
     {
         $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    public function getEquipeDomicile(): ?Equipe
+    {
+        return $this->equipe_domicile;
+    }
+
+    public function setEquipeDomicile(?Equipe $equipe_domicile): static
+    {
+        $this->equipe_domicile = $equipe_domicile;
+
+        return $this;
+    }
+
+    public function getEquipeExterieure(): ?Equipe
+    {
+        return $this->equipe_exterieure;
+    }
+
+    public function setEquipeExterieure(?Equipe $equipe_exterieure): static
+    {
+        $this->equipe_exterieure = $equipe_exterieure;
 
         return $this;
     }

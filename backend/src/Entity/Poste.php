@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PosteRepository::class)]
 class Poste
@@ -16,21 +17,31 @@ class Poste
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Le nom du poste est obligatoire.")]
     #[ORM\Column(length: 80)]
     private ?string $nom_poste = null;
 
+    #[Assert\NotBlank(message: "La description du poste est obligatoire.")]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description_poste = null;
 
+    #[Assert\PositiveOrZero]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private int $min_vitesse = 0;
 
+    #[Assert\PositiveOrZero]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private int $min_endurance = 0;
 
+    #[Assert\PositiveOrZero]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private int $min_force = 0;
 
+    #[Assert\PositiveOrZero]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private int $min_technique = 0;
 
@@ -74,7 +85,7 @@ class Poste
         return $this;
     }
 
-    public function getMinVitesse(): ?int
+    public function getMinVitesse(): int
     {
         return $this->min_vitesse;
     }
@@ -86,7 +97,7 @@ class Poste
         return $this;
     }
 
-    public function getMinEndurance(): ?int
+    public function getMinEndurance(): int
     {
         return $this->min_endurance;
     }
@@ -98,7 +109,7 @@ class Poste
         return $this;
     }
 
-    public function getMinForce(): ?int
+    public function getMinForce(): int
     {
         return $this->min_force;
     }
@@ -110,7 +121,7 @@ class Poste
         return $this;
     }
 
-    public function getMinTechnique(): ?int
+    public function getMinTechnique(): int
     {
         return $this->min_technique;
     }
@@ -142,8 +153,7 @@ class Poste
 
     public function removeJoueur(Joueur $joueur): static
     {
-        if ($this->joueurs->removeElement($joueur)) {
-        }
+        $this->joueurs->removeElement($joueur);
 
         return $this;
     }

@@ -30,21 +30,25 @@ class Joueur
 
     #[Assert\NotNull]
     #[Assert\Positive]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private ?int $vitesse = null;
 
     #[Assert\NotNull]
     #[Assert\Positive]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private ?int $endurance = null;
 
     #[Assert\NotNull]
     #[Assert\Positive]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private ?int $force = null;
 
     #[Assert\NotNull]
     #[Assert\Positive]
+    #[Assert\Range(min: 0, max: 100)]
     #[ORM\Column]
     private ?int $technique = null;
 

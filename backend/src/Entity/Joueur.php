@@ -6,8 +6,10 @@ use App\Repository\JoueurRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: JoueurRepository::class)]
+#[ApiResource]
 class Joueur
 {
     #[ORM\Id]

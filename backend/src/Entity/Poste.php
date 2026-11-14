@@ -144,9 +144,6 @@ class Poste
     {
         if ($this->joueurs->removeElement($joueur)) {
             // set the owning side to null (unless already changed)
-            if ($joueur->getPoste() === $this) {
-                $joueur->setPoste(null);
-            }
         }
 
         return $this;

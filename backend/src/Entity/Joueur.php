@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\JoueurRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: JoueurRepository::class)]
 class Joueur
@@ -14,27 +15,40 @@ class Joueur
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotNull(message: "Le nom est obligatoire.")]
     #[ORM\Column(length: 80)]
     private ?string $nom_joueur = null;
 
+    #[Assert\NotNull(message: "Le prénom est obligatoire.")]
     #[ORM\Column(length: 80)]
     private ?string $prenom_joueur = null;
 
+    #[Assert\NotNull(message: "L'age est obligatoire.")]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $age = null;
 
+    #[Assert\NotNull]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $vitesse = null;
 
+    #[Assert\NotNull]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $endurance = null;
 
+    #[Assert\NotNull]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $force = null;
 
+    #[Assert\NotNull]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $technique = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private int $match_absence = 0;
 
@@ -193,7 +207,7 @@ class Joueur
         return $this->poste;
     }
 
-    public function setPoste(?Poste $poste): static
+    public function setPoste(Poste $poste): static
     {
         $this->poste = $poste;
 

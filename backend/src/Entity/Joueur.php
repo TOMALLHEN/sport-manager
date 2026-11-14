@@ -154,7 +154,7 @@ class Joueur
         return $this;
     }
 
-    public function getMatchAbsence(): ?int
+    public function getMatchAbsence(): int
     {
         return $this->match_absence;
     }

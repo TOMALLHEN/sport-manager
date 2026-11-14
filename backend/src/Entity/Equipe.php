@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EquipeRepository::class)]
 class Equipe
@@ -16,21 +17,28 @@ class Equipe
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Le nom de l'équipe est obligatoire.")]
     #[ORM\Column(length: 255)]
     private ?string $nom_equipe = null;
 
+    #[Assert\NotBlank(message: "Un coach est obligatoire.")]
     #[ORM\Column(length: 80)]
     private ?string $coach = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private int $nb_victoires = 0;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private int $nb_defaites = 0;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column]
     private int $nb_matchs = 0;
 
+    #[Assert\NotNull]
+    #[Assert\Positive]
     #[ORM\Column]
     private ?int $niveau_global = null;
 
@@ -57,6 +65,8 @@ class Equipe
 
     public function __construct()
     {
+        $this->date_creation = new \DateTime();
+
         $this->joueurs = new ArrayCollection();
         $this->matchs_domicile = new ArrayCollection();
         $this->matchs_exterieurs = new ArrayCollection();
@@ -91,7 +101,7 @@ class Equipe
         return $this;
     }
 
-    public function getNbVictoires(): ?int
+    public function getNbVictoires(): int
     {
         return $this->nb_victoires;
     }
@@ -103,7 +113,7 @@ class Equipe
         return $this;
     }
 
-    public function getNbDefaites(): ?int
+    public function getNbDefaites(): int
     {
         return $this->nb_defaites;
     }
@@ -115,7 +125,7 @@ class Equipe
         return $this;
     }
 
-    public function getNbMatchs(): ?int
+    public function getNbMatchs(): int
     {
         return $this->nb_matchs;
     }
@@ -202,10 +212,6 @@ class Equipe
     public function removeMatchsDomicile(MatchEquipe $matchsDomicile): static
     {
         if ($this->matchs_domicile->removeElement($matchsDomicile)) {
-            // set the owning side to null (unless already changed)
-            if ($matchsDomicile->getEquipeDomicile() === $this) {
-                $matchsDomicile->setEquipeDomicile(null);
-            }
         }
 
         return $this;
@@ -232,10 +238,6 @@ class Equipe
     public function removeMatchsExterieur(MatchEquipe $matchsExterieur): static
     {
         if ($this->matchs_exterieurs->removeElement($matchsExterieur)) {
-            // set the owning side to null (unless already changed)
-            if ($matchsExterieur->getEquipeExterieure() === $this) {
-                $matchsExterieur->setEquipeExterieure(null);
-            }
         }
 
         return $this;

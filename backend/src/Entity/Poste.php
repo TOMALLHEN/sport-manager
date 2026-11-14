@@ -143,7 +143,6 @@ class Poste
     public function removeJoueur(Joueur $joueur): static
     {
         if ($this->joueurs->removeElement($joueur)) {
-            // set the owning side to null (unless already changed)
         }
 
         return $this;

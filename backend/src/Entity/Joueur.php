@@ -68,7 +68,7 @@ class Joueur
     private ?Equipe $equipe = null;
 
     #[ORM\ManyToOne(inversedBy: 'joueurs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Poste $poste = null;
 
     public function getId(): ?int
@@ -213,7 +213,7 @@ class Joueur
         return $this->poste;
     }
 
-    public function setPoste(Poste $poste): static
+    public function setPoste(?Poste $poste): static
     {
         $this->poste = $poste;
 

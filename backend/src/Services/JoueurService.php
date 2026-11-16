@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repository\JoueurRepository;
 use App\Repository\EquipeRepository;
+use App\Repository\PosteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class JoueurService
@@ -11,6 +12,7 @@ final class JoueurService
     public function __construct(
         private JoueurRepository $joueurRepository,
         private EquipeRepository $equipeRepository,
+        private PosteRepository $posteRepository,
         private EntityManagerInterface $entityManager
     ) {}
 
@@ -28,6 +30,23 @@ final class JoueurService
         }
 
         $joueur->setEquipe($equipe);
+        $this->entityManager->flush();
+    }
+
+    public function affecterJoueurPoste($joueurId, $posteId): void {
+        $joueur = $this->joueurRepository->findOneBy(['id' => $joueurId]);
+
+        if(!$joueur) {
+            throw new \Exception("Joueur introuvable");
+        }
+
+        $poste = $this->posteRepository->findOneBy(['id' => $posteId]);
+
+        if(!$poste) {
+            throw new \Exception("Poste introuvable");
+        }
+
+        $joueur->setPoste($poste);
         $this->entityManager->flush();
     }
 }

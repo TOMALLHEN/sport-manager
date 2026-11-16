@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class JoueurController extends AbstractController
 {
     #[Route(
-        '/api/joueur/{joueurId}/affecter/{equipeId}',
+        '/api/joueur/{joueurId}/affecterEquipe/{equipeId}',
         name: 'affecter_joueur',
         requirements: ['joueurId' => '\d+', 'equipeId' => '\d+'],
         methods: ['POST']
@@ -25,6 +25,24 @@ final class JoueurController extends AbstractController
 
         return $this->json([
             'message' => 'Joueur affecté avec succès'
+        ]);
+    }
+
+    #[Route(
+        '/api/joueur/{joueurId}/affecterPoste/{posteId}',
+        name: 'affecter_poste',
+        requirements: ['joueurId' => '\d+', 'posteId' => '\d+'],
+        methods: ['POST']
+    )]
+    public function affecterPoste(
+        int $joueurId,
+        int $posteId,
+        JoueurService $joueurService
+    ): JsonResponse {
+        $joueurService->affecterJoueurPoste($joueurId, $posteId);
+
+        return $this->json([
+            'message' => 'Poste affecté avec succès'
         ]);
     }
 }

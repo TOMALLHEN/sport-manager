@@ -5,6 +5,11 @@ namespace App\Services;
 use App\Repository\JoueurRepository;
 use App\Repository\EquipeRepository;
 use App\Repository\PosteRepository;
+use App\Exception\JoueurIntrouvableException;
+use App\Exception\EquipeIntrouvableException;
+use App\Exception\JoueurMemePosteException;
+use App\Exception\PosteIntrouvableException;
+use App\Exception\JoueurPostePossedeException;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class JoueurService
@@ -20,13 +25,13 @@ final class JoueurService
         $joueur = $this->joueurRepository->find($joueurId);
 
         if(!$joueur) {
-            throw new \Exception("Joueur introuvable");
+            throw new JoueurIntrouvableException("Joueur introuvable");
         }
 
         $equipe = $this->equipeRepository->find($equipeId);
 
         if(!$equipe) {
-            throw new \Exception("Equipe introuvable");
+            throw new EquipeIntrouvableException("Equipe introuvable");
         }
 
         $joueur->setEquipe($equipe);
@@ -37,13 +42,13 @@ final class JoueurService
         $joueur = $this->joueurRepository->findOneBy(['id' => $joueurId]);
 
         if(!$joueur) {
-            throw new \Exception("Joueur introuvable");
+            throw new JoueurIntrouvableException("Joueur introuvable");
         }
 
         $poste = $this->posteRepository->findOneBy(['id' => $posteId]);
 
         if(!$poste) {
-            throw new \Exception("Poste introuvable");
+            throw new PosteIntrouvableException("Poste introuvable");
         }
 
         $joueur->setPoste($poste);
@@ -55,15 +60,15 @@ final class JoueurService
         $joueur2 = $this->joueurRepository->findOneBy(['id' => $joueurEchangeant]);
 
         if (!$joueur1 || !$joueur2) {
-            throw new \Exception("Un des joueurs est introuvable");
+            throw new JoueurIntrouvableException("Un des joueurs est introuvable");
         }
 
         if ($joueur1->getPoste() === null || $joueur2->getPoste() === null) {
-            throw new \Exception("Un des deux joueurs possède déjà un poste");
+            throw new JoueurPostePossedeException("Un des deux joueurs possède déjà un poste");
         }
 
         if ($joueur1->getPoste() === $joueur2->getPoste()) {
-            throw new \Exception("Les joueurs possèdent déjà le même poste");
+            throw new JoueurMemePosteException("Les joueurs possèdent déjà le même poste");
         }
 
         // récupération du poste actuel des 2 joueurs

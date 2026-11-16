@@ -162,4 +162,15 @@ final class JoueurService
 
         return false;
     }
+
+    public function verifierJoueurSansPoste(Equipe $equipe): bool {
+        
+        foreach ($equipe->getJoueurs() as $joueur) {
+            if ($joueur->getPoste() === null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

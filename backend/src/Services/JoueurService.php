@@ -105,25 +105,23 @@ final class JoueurService
         $this->entityManager->flush();
     }
 
-    public function diminuerAbsence(Joueur $joueur): void {
+    public function diminuerAbsence(): void {
+        $joueurs = $this->joueurRepository->findAll();
 
-        if (!$joueur->isBlesse()) {
-            return;
+        foreach ($joueurs as $joueur) {
+
+            if ($joueur->getMatchAbsence() > 0) {
+                $joueur->setMatchAbsence($joueur->getMatchAbsence() - 1);
+            }
+
+            if ($joueur->getMatchAbsence() === 0 && $joueur->isBlesse()) {
+                $joueur->setBlesse(false);
+                $joueur->setDateBlessure(null);
+            }
         }
 
-        $absence = $joueur->getMatchAbsence();
-
-        if ($absence > 0) {
-            $joueur->setMatchAbsence($absence - 1);
-        }
-
-        if ($joueur->getMatchAbsence() === 0) {
-            $joueur->setBlesse(false);
-            $joueur->setDateBlessure(null);
-        }
-
-        $this->entityManager->flush();
-    }
+    $this->entityManager->flush();
+}
 
     public function attribuerPointsStats(Equipe $equipe, string $resultat): void {
         foreach ($equipe->getJoueurs() as $joueur) {

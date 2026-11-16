@@ -29,7 +29,7 @@ final class EquipeService
 
             $tirage = random_int(1, 100);
 
-            if ($tirage <= 20) {
+            if ($tirage <= 10) {
                 $joueur->setBlesse(true);
                 $joueur->setMatchAbsence(3);
                 $joueur->setDateBlessure(new \DateTime());

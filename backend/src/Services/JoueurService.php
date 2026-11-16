@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\Joueur;
+use App\Entity\Poste;
 use App\Repository\JoueurRepository;
 use App\Repository\EquipeRepository;
 use App\Repository\PosteRepository;
@@ -11,6 +12,7 @@ use App\Exception\EquipeIntrouvableException;
 use App\Exception\JoueurMemePosteException;
 use App\Exception\PosteIntrouvableException;
 use App\Exception\JoueurPostePossedeException;
+use App\Exception\StatistiquesInsuffisantesException;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class JoueurService
@@ -39,6 +41,23 @@ final class JoueurService
         $this->entityManager->flush();
     }
 
+    public function verifierStatistiquesPoste(Joueur $joueur, Poste $poste): void {
+
+        $statistiques = [
+            'Vitesse' => [$joueur->getVitesse(), $poste->getMinVitesse()],
+            'Endurance' => [$joueur->getEndurance(), $poste->getMinEndurance()],
+            'Force' => [$joueur->getForce(), $poste->getMinForce()],
+            'Technique' => [$joueur->getTechnique(), $poste->getMinTechnique()]
+        ];
+
+        foreach ($statistiques as $nomStat => [$statJoueur, $statMin]) {
+            if ($statJoueur < $statMin) {
+                throw new StatistiquesInsuffisantesException("Le joueur n'a pas assez de $nomStat pour ce poste");
+            }
+        }
+    }
+
+
     public function affecterJoueurPoste(int $joueurId, int $posteId): void {
         $joueur = $this->joueurRepository->findOneBy(['id' => $joueurId]);
 
@@ -52,9 +71,11 @@ final class JoueurService
             throw new PosteIntrouvableException("Poste introuvable");
         }
 
+        $this->verifierStatistiquesPoste($joueur, $poste);
         $joueur->setPoste($poste);
         $this->entityManager->flush();
     }
+
 
     public function swapJoueurPoste(int $joueurEchangeId, int $joueurEchangeant): void {
         $joueur1 = $this->joueurRepository->findOneBy(['id' => $joueurEchangeId]);

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Joueur;
 use App\Repository\JoueurRepository;
 use App\Repository\EquipeRepository;
 use App\Repository\PosteRepository;
@@ -78,6 +79,26 @@ final class JoueurService
         // swap de poste entre les 2 joueurs
         $joueur1->setPoste($poste2);
         $joueur2->setPoste($poste1);
+
+        $this->entityManager->flush();
+    }
+
+    public function diminuerAbsence(Joueur $joueur): void {
+
+        if (!$joueur->isBlesse()) {
+            return;
+        }
+
+        $absence = $joueur->getMatchAbsence();
+
+        if ($absence > 0) {
+            $joueur->setMatchAbsence($absence - 1);
+        }
+
+        if ($joueur->getMatchAbsence() === 0) {
+            $joueur->setBlesse(false);
+            $joueur->setDateBlessure(null);
+        }
 
         $this->entityManager->flush();
     }

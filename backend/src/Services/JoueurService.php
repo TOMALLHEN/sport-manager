@@ -111,7 +111,7 @@ final class JoueurService
         foreach ($joueurs as $joueur) {
 
             if ($joueur->getMatchAbsence() > 0) {
-                $joueur->setMatchAbsence($joueur->getMatchAbsence() - 1);
+                $joueur->setMatchAbsence(max(0, min(4, $joueur->getMatchAbsence() - 1)));
             }
 
             if ($joueur->getMatchAbsence() === 0 && $joueur->isBlesse()) {
@@ -164,7 +164,7 @@ final class JoueurService
     }
 
     public function verifierJoueurSansPoste(Equipe $equipe): bool {
-        
+
         foreach ($equipe->getJoueurs() as $joueur) {
             if ($joueur->getPoste() === null) {
                 return true;

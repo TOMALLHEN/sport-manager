@@ -31,7 +31,7 @@ final class EquipeService
 
             if ($tirage <= 10) {
                 $joueur->setBlesse(true);
-                $joueur->setMatchAbsence(3);
+                $joueur->setMatchAbsence(4);
                 $joueur->setDateBlessure(new \DateTime());
             }
         }

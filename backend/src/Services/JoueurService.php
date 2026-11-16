@@ -142,7 +142,7 @@ final class JoueurService
                 $joueur->setEndurance($joueur->getEndurance() + $endurance);
                 $joueur->setForce($joueur->getForce() + $force);
                 $joueur->setTechnique($joueur->getTechnique() + $technique);
-                
+
             } elseif ($resultat === 'defaite') {
                 $joueur->setVitesse(max(0, $joueur->getVitesse() - $vitesse));
                 $joueur->setEndurance(max(0, $joueur->getEndurance() - $endurance));
@@ -152,5 +152,16 @@ final class JoueurService
         }
 
         $this->entityManager->flush();
+    }
+
+    public function verifierJoueurBlesse(Equipe $equipe): bool{
+
+        foreach ($equipe->getJoueurs() as $joueur) {
+            if ($joueur->isBlesse()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

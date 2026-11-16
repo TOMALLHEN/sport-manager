@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Equipe;
 use App\Repository\EquipeRepository;
 use App\Exception\EquipeIntrouvableException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,7 @@ final class EquipeService
         private EntityManagerInterface $entityManager
     ) {}
 
-    public function verifierBlessures(int $equipeId): void {
+    public function verifierBlessures(Equipe $equipeId): void {
         $equipe = $this->equipeRepository->findOneBy(['id' => $equipeId]);
 
         if (!$equipe) {

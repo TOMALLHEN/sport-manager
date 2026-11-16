@@ -64,7 +64,7 @@ final class JoueurService
         }
 
         if ($joueur1->getPoste() === null || $joueur2->getPoste() === null) {
-            throw new JoueurPostePossedeException("Un des deux joueurs possède déjà un poste");
+            throw new JoueurPostePossedeException("Un des deux joueurs ne possède pas de poste");
         }
 
         if ($joueur1->getPoste() === $joueur2->getPoste()) {

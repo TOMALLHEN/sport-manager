@@ -48,6 +48,7 @@ final class JoueurController extends AbstractController
         ]);
     }
 
+    // swap de poste entre 2 joueurs
     #[Route(
         '/api/joueur/{joueurId}/swapPoste/{joueurEchangeantId}',
         name: 'swap_joueur_poste',

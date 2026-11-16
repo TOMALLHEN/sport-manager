@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entity\Joueur;
 use App\Entity\Poste;
+use App\Entity\Equipe;
 use App\Repository\JoueurRepository;
 use App\Repository\EquipeRepository;
 use App\Repository\PosteRepository;
@@ -119,6 +120,35 @@ final class JoueurService
         if ($joueur->getMatchAbsence() === 0) {
             $joueur->setBlesse(false);
             $joueur->setDateBlessure(null);
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function attribuerPointsStats(Equipe $equipe, string $resultat): void {
+        foreach ($equipe->getJoueurs() as $joueur) {
+
+            if ($resultat === 'egalite') {
+                continue;
+            }
+
+            $vitesse = random_int(1, 3);
+            $endurance = random_int(1, 3);
+            $force = random_int(1, 3);
+            $technique = random_int(1, 3);
+
+            if ($resultat === 'victoire') {
+                $joueur->setVitesse($joueur->getVitesse() + $vitesse);
+                $joueur->setEndurance($joueur->getEndurance() + $endurance);
+                $joueur->setForce($joueur->getForce() + $force);
+                $joueur->setTechnique($joueur->getTechnique() + $technique);
+                
+            } elseif ($resultat === 'defaite') {
+                $joueur->setVitesse(max(0, $joueur->getVitesse() - $vitesse));
+                $joueur->setEndurance(max(0, $joueur->getEndurance() - $endurance));
+                $joueur->setForce(max(0, $joueur->getForce() - $force));
+                $joueur->setTechnique(max(0, $joueur->getTechnique() - $technique));
+            }
         }
 
         $this->entityManager->flush();

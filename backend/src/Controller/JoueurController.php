@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class JoueurController extends AbstractController
 {
+    // Affectation d'un joueur à une équipe
     #[Route(
         '/api/joueur/{joueurId}/affecterEquipe/{equipeId}',
         name: 'affecter_joueur',
@@ -28,6 +29,7 @@ final class JoueurController extends AbstractController
         ]);
     }
 
+    // Affectation d'un joueur à un poste
     #[Route(
         '/api/joueur/{joueurId}/affecterPoste/{posteId}',
         name: 'affecter_poste',
@@ -43,6 +45,24 @@ final class JoueurController extends AbstractController
 
         return $this->json([
             'message' => 'Poste affecté avec succès'
+        ]);
+    }
+
+    #[Route(
+        '/api/joueur/{joueurId}/swapPoste/{joueurEchangeantId}',
+        name: 'swap_joueur_poste',
+        requirements: ['joueurId' => '\d+', 'joueurEchangeantId' => '\d+'],
+        methods: ['POST']
+    )]
+    public function swapPoste(
+        int $joueurId,
+        int $joueurEchangeantId,
+        JoueurService $joueurService
+    ): JsonResponse {
+        $joueurService->swapJoueurPoste($joueurId, $joueurEchangeantId);
+
+        return $this->json([
+            'message' => 'Poste des joueurs échangés avec succès'
         ]);
     }
 }

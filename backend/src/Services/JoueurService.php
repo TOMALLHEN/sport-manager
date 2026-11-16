@@ -21,7 +21,7 @@ final class JoueurService
         private EntityManagerInterface $entityManager
     ) {}
 
-    public function affecterJoueur($joueurId, $equipeId): void {
+    public function affecterJoueur(int $joueurId, int $equipeId): void {
         $joueur = $this->joueurRepository->find($joueurId);
 
         if(!$joueur) {
@@ -38,7 +38,7 @@ final class JoueurService
         $this->entityManager->flush();
     }
 
-    public function affecterJoueurPoste($joueurId, $posteId): void {
+    public function affecterJoueurPoste(int $joueurId, int $posteId): void {
         $joueur = $this->joueurRepository->findOneBy(['id' => $joueurId]);
 
         if(!$joueur) {
@@ -55,7 +55,7 @@ final class JoueurService
         $this->entityManager->flush();
     }
 
-    public function swapJoueurPoste($joueurEchangeId, $joueurEchangeant): void {
+    public function swapJoueurPoste(int $joueurEchangeId, int $joueurEchangeant): void {
         $joueur1 = $this->joueurRepository->findOneBy(['id' => $joueurEchangeId]);
         $joueur2 = $this->joueurRepository->findOneBy(['id' => $joueurEchangeant]);
 
@@ -80,6 +80,5 @@ final class JoueurService
         $joueur2->setPoste($poste1);
 
         $this->entityManager->flush();
-
     }
 }

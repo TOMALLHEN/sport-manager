@@ -14,7 +14,7 @@ final class JoueurController extends AbstractController
         '/api/joueur/{joueurId}/affecterEquipe/{equipeId}',
         name: 'affecter_joueur',
         requirements: ['joueurId' => '\d+', 'equipeId' => '\d+'],
-        methods: ['POST']
+        methods: ['PATCH']
     )]
     public function affectation(
         int $joueurId,
@@ -34,7 +34,7 @@ final class JoueurController extends AbstractController
         '/api/joueur/{joueurId}/affecterPoste/{posteId}',
         name: 'affecter_poste',
         requirements: ['joueurId' => '\d+', 'posteId' => '\d+'],
-        methods: ['POST']
+        methods: ['PATCH']
     )]
     public function affecterPoste(
         int $joueurId,
@@ -53,7 +53,7 @@ final class JoueurController extends AbstractController
         '/api/joueur/{joueurId}/swapPoste/{joueurEchangeantId}',
         name: 'swap_joueur_poste',
         requirements: ['joueurId' => '\d+', 'joueurEchangeantId' => '\d+'],
-        methods: ['POST']
+        methods: ['PATCH']
     )]
     public function swapPoste(
         int $joueurId,
